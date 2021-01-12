@@ -31,8 +31,8 @@ namespace Dell.BrightnessManager
             timer.Enabled = true;
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e) {
-            RefreshBrightness(settings, sunRadiationRepository);
+        private async void OnTimedEvent(Object source, ElapsedEventArgs e) {
+            await RefreshBrightness(settings, sunRadiationRepository);
         }
 
         private static async Task RefreshBrightness(Settings settings, ISunRadiationRepository sunRadiationRepository) {

@@ -18,7 +18,7 @@ namespace Dell.BrightnessManager.Worker
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
-            var settingsPath = System.IO.Path.GetDirectoryName(typeof(SunRadiationRepository).Assembly.Location)
+            var settingsPath = System.IO.Path.GetDirectoryName(typeof(Worker).Assembly.Location)
                 + "\\settings.json";
             var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(settingsPath));
             var sunRadiationRepository = new SunRadiationRepository(settings.ForecastURL);
