@@ -21,6 +21,7 @@ namespace Dell.BrightnessManager.Worker
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
+            await Task.Yield();
             var settingsPath = System.IO.Path.GetDirectoryName(typeof(Worker).Assembly.Location)
                 + "\\settings.json";
             var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(settingsPath));
