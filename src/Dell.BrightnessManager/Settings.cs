@@ -10,6 +10,8 @@ namespace Dell.BrightnessManager
 
         public string ForecastURL { get; set; }
 
+        public int RefreshIntervallMs { get; set; }
+
         public int BrightnessLevel1 { get; set; }
 
         public int BrightnessLevel2 { get; set; }
