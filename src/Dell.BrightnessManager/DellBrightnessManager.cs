@@ -29,6 +29,12 @@ namespace Dell.BrightnessManager
             StartTimer();
         }
 
+        public void Stop()
+        {
+            timer.Stop();
+            timer.Dispose();
+        }
+
         private void StartTimer() {
             timer.Interval = settings.RefreshIntervallMs;
             timer.Elapsed += OnTimedEvent;
