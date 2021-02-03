@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +10,7 @@ namespace Dell.BrightnessManager.Worker
     {
         public static void Main(string[] args) {
              CreateHostBuilder(args)
-                .Build().Start();
+                .Build().StartAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
