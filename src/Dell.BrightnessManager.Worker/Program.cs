@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,17 +7,9 @@ namespace Dell.BrightnessManager.Worker
 {
     public class Program
     {
-        public static async Task Main(string[] args) {
-            var isService = !(Debugger.IsAttached || args.Contains("--console"));
-
-            var builder = CreateHostBuilder(args)
-                .UseEnvironment(isService ? Environments.Production : Environments.Development);
-
-            if (isService) {
-                await builder.RunAsServiceAsync();
-            } else {
-                await builder.RunConsoleAsync();
-            }
+        public static void Main(string[] args) {
+             CreateHostBuilder(args)
+                .Build().Start();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -32,6 +20,7 @@ namespace Dell.BrightnessManager.Worker
                     logging.AddFile(config => {
                         config.Extension = ".log";
                     });
-                });
+                })
+            .UseWindowsService();
     }
 }
