@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,9 +13,11 @@ namespace Dell.BrightnessManager.Worker
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly ILoggerFactory loggerFactory;
 
-        public Worker(ILogger<Worker> logger) {
-            _logger = logger;
+        public Worker(ILoggerFactory loggerFactory) {
+            _logger = loggerFactory.CreateLogger<Worker>();
+            this.loggerFactory = loggerFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
@@ -23,7 +26,10 @@ namespace Dell.BrightnessManager.Worker
             var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(settingsPath));
             var sunRadiationRepository = new SunRadiationRepository(settings.ForecastURL);
 
-            var manager = new DellBrightnessManager(settings, sunRadiationRepository);
+            var manager = new DellBrightnessManager(
+                settings: settings,
+                sunRadiationRepository: sunRadiationRepository,
+                logger: loggerFactory.CreateLogger<DellBrightnessManager>());
 
             _logger.LogInformation("Brightness Manager Initialized");
         }
