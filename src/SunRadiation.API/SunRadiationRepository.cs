@@ -23,8 +23,17 @@ namespace SunRadiation.API
         }
 
         private ForecastRepository LoadForecastRepository() {
-            var forecastFilePath = System.IO.Path.GetDirectoryName(typeof(SunRadiationRepository).Assembly.Location)
+            var localForecastFilePath = System.IO.Path.GetDirectoryName(typeof(SunRadiationRepository).Assembly.Location)
                 + "\\forecast.json";
+
+            var forecastFilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                + "\\DellBrightnessManager\\forecast.json";
+
+            if (!File.Exists(forecastFilePath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(forecastFilePath));
+                File.Copy(localForecastFilePath, forecastFilePath);
+            }
 
             return JsonConvert.DeserializeObject<ForecastRepository>(File.ReadAllText(forecastFilePath));
         }
@@ -36,8 +45,9 @@ namespace SunRadiation.API
             string responseBody = await response.Content.ReadAsStringAsync();
             forecastRepository = JsonConvert.DeserializeObject<ForecastRepository>(responseBody);
 
-            var forecastFilePath = System.IO.Path.GetDirectoryName(typeof(SunRadiationRepository).Assembly.Location)
-                + "\\forecast.json";
+            var forecastFilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                + "\\DellBrightnessManager\\forecast.json";
+
             File.WriteAllText(forecastFilePath, responseBody);
         }
 
