@@ -16,10 +16,9 @@ namespace Dell.BrightnessManager.Worker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) => {
                     services.AddHostedService<Worker>();
-                }).ConfigureLogging((hostingContext, logging) => {
-                    logging.AddFile(config => {
-                        config.Extension = ".log";
-                    });
+                }).ConfigureLogging((hostingContext, builder) => {
+                    builder.AddFile($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}"
+                + "\\DellBrightnessManager\\Logs\\log_{Date}.log", LogLevel.Information);
                 })
             .UseWindowsService();
     }
