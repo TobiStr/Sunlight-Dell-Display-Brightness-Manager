@@ -18,8 +18,7 @@ namespace Dell.BrightnessManager
 
         private readonly ILogger<DellBrightnessManager> logger;
 
-        public DellBrightnessManager(Settings settings, ISunRadiationRepository sunRadiationRepository, ILogger<DellBrightnessManager> logger)
-        {
+        public DellBrightnessManager(Settings settings, ISunRadiationRepository sunRadiationRepository, ILogger<DellBrightnessManager> logger) {
             this.settings = settings
                 ?? throw new ArgumentNullException(nameof(settings));
             this.sunRadiationRepository = sunRadiationRepository
@@ -29,8 +28,7 @@ namespace Dell.BrightnessManager
             StartTimer();
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             timer.Stop();
             timer.Dispose();
         }
@@ -56,7 +54,10 @@ namespace Dell.BrightnessManager
 
             logger.LogInformation($"Current estimated radiation is {currentRadiation}.");
 
-            var brightness = brightnessDictionary.OrderBy(kvp => currentRadiation - kvp.Key).Last().Value;
+            var brightness = brightnessDictionary
+                .OrderBy(kvp => Math.Abs(currentRadiation - kvp.Key))
+                .First()
+                .Value;
 
             logger.LogInformation($"Configured Brightness for radiation {currentRadiation} is {brightness}.");
 
@@ -66,7 +67,7 @@ namespace Dell.BrightnessManager
         private void SetBrightness(int brightness, string executablePath) {
             ProcessStartInfo processInfo;
             Process process;
-            
+
             logger.LogInformation($"Setting Brightness to {brightness}...");
 
             processInfo = new ProcessStartInfo(executablePath, $"/SetBrightnessLevel {brightness}") {
